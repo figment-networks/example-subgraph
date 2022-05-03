@@ -1,6 +1,362 @@
-type Gravatar @entity {
+type Block @entity {
   id: ID!
-  owner: Bytes!
-  displayName: String!
-  imageUrl: String!
+  header: Header
+  evidence: EvidenceList
+  lastCommit: Commit
+  resultBeginBlock: ResponseBeginBlock
+  resultEndBlock: ResponseEndBlock
+  transactions: [TxResult!]
+  validatorUpdates: [Validator!]
+}
+
+type HeaderOnlyBlock @entity {
+  id: ID!
+  header: Header
+}
+
+type EventData @entity {
+  id: ID!
+  event: Event
+  block: HeaderOnlyBlock
+}
+
+type TransactionData @entity {
+  id: ID!
+  tx: TxResult
+  block: HeaderOnlyBlock
+}
+
+type Header @entity {
+  id: ID!
+  version: Consensus
+  chainId: String
+  height: BigInt
+  time: Timestamp
+  lastBlockId: BlockID
+  lastCommitHash: Bytes
+  dataHash: Bytes
+  validatorsHash: Bytes
+  nextValidatorsHash: Bytes
+  consensusHash: Bytes
+  appHash: Bytes
+  lastResultsHash: Bytes
+  evidenceHash: Bytes
+  proposerAddress: Bytes
+  hash: Bytes
+}
+
+type Consensus @entity {
+  id: ID!
+  block: BigInt
+  app: BigInt
+}
+
+type Timestamp @entity {
+  id: ID!
+  seconds: BigInt
+  nanos: Int
+}
+
+type BlockID @entity {
+  id: ID!
+  hash: Bytes
+  partSetHeader: PartSetHeader
+}
+
+type PartSetHeader @entity {
+  id: ID!
+  total: BigInt
+  hash: Bytes
+}
+
+type EvidenceList @entity {
+  id: ID!
+  evidence: [Evidence!]
+}
+
+type Evidence @entity {
+  id: ID!
+  duplicateVoteEvidence: DuplicateVoteEvidence
+  lightClientAttackEvidence: LightClientAttackEvidence
+}
+
+type DuplicateVoteEvidence @entity {
+  id: ID!
+  voteA: EventVote
+  voteB: EventVote
+  totalVotingPower: BigInt
+  validatorPower: BigInt
+  timestamp: Timestamp
+}
+
+type EventVote @entity {
+  id: ID!
+  eventVoteType: SignedMsgType
+  height: BigInt
+  round: Int
+  blockId: BlockID
+  timestamp: Timestamp
+  validatorAddress: Bytes
+  validatorIndex: Int
+  signature: Bytes
+}
+
+enum SignedMsgType {
+  SIGNED_MSG_TYPE_UNKNOWN
+  SIGNED_MSG_TYPE_PREVOTE
+  SIGNED_MSG_TYPE_PRECOMMIT
+  SIGNED_MSG_TYPE_PROPOSAL
+}
+
+type LightClientAttackEvidence @entity {
+  id: ID!
+  conflictingBlock: LightBlock
+  commonHeight: BigInt
+  byzantineValidators: [Validator!]
+  totalVotingPower: BigInt
+  timestamp: Timestamp
+}
+
+type LightBlock @entity {
+  id: ID!
+  signedHeader: SignedHeader
+  validatorSet: ValidatorSet
+}
+
+type SignedHeader @entity {
+  id: ID!
+  header: Header
+  commit: Commit
+}
+
+type Commit @entity {
+  id: ID!
+  height: BigInt
+  round: Int
+  blockId: BlockID
+  signatures: [CommitSig!]
+}
+
+type CommitSig @entity {
+  id: ID!
+  blockIdFlag: BlockIDFlag
+  validatorAddress: Bytes
+  timestamp: Timestamp
+  signature: Bytes
+}
+
+enum BlockIDFlag {
+  BLOCK_ID_FLAG_UNKNOWN
+  BLOCK_ID_FLAG_ABSENT
+  BLOCK_ID_FLAG_COMMIT
+  BLOCK_ID_FLAG_NIL
+}
+
+type ValidatorSet @entity {
+  id: ID!
+  validators: [Validator!]
+  proposer: Validator
+  totalVotingPower: BigInt
+}
+
+type Validator @entity {
+  id: ID!
+  address: Bytes
+  pubKey: PublicKey
+  votingPower: BigInt
+  proposerPriority: BigInt
+}
+
+type PublicKey @entity {
+  id: ID!
+  ed25519: Bytes
+  secp256k1: Bytes
+}
+
+type ResponseBeginBlock @entity {
+  id: ID!
+  events: [Event!]
+}
+
+type Event @entity {
+  id: ID!
+  eventType: String
+  attributes: [EventAttribute!]
+}
+
+type EventAttribute @entity {
+  id: ID!
+  key: String
+  value: String
+  index: Boolean
+}
+
+type ResponseEndBlock @entity {
+  id: ID!
+  validatorUpdates: [ValidatorUpdate!]
+  consensusParamUpdates: ConsensusParams
+  events: [Event!]
+}
+
+type ValidatorUpdate @entity {
+  id: ID!
+  address: Bytes
+  pubKey: PublicKey
+  power: BigInt
+}
+
+type ConsensusParams @entity {
+  id: ID!
+  block: BlockParams
+  evidence: EvidenceParams
+  validator: ValidatorParams
+  version: VersionParams
+}
+
+type BlockParams @entity {
+  id: ID!
+  maxBytes: BigInt
+  maxGas: BigInt
+}
+
+type EvidenceParams @entity {
+  id: ID!
+  maxAgeNumBlocks: BigInt
+  maxAgeDuration: Duration
+  maxBytes: BigInt
+}
+
+type Duration @entity {
+  id: ID!
+  seconds: BigInt
+  nanos: Int
+}
+
+type ValidatorParams @entity {
+  id: ID!
+  pubKeyTypes: [String!]
+}
+
+type VersionParams @entity {
+  id: ID!
+  appVersion: BigInt
+}
+
+type TxResult @entity {
+  id: ID!
+  height: BigInt
+  index: BigInt
+  tx: Tx
+  result: ResponseDeliverTx
+  hash: Bytes
+}
+
+type Tx @entity {
+  id: ID!
+  body: TxBody
+  authInfo: AuthInfo
+  signatures: [Bytes!]
+}
+
+type TxBody @entity {
+  id: ID!
+  messages: [Any!]
+  memo: String
+  timeoutHeight: BigInt
+  extensionOptions: [Any!]
+  nonCriticalExtensionOptions: [Any!]
+}
+
+type Any @entity {
+  id: ID!
+  typeUrl: String
+  value: Bytes
+}
+
+type AuthInfo @entity {
+  id: ID!
+  signerInfos: [SignerInfo!]
+  fee: Fee
+  tip: Tip
+}
+
+type SignerInfo @entity {
+  id: ID!
+  publicKey: Any
+  modeInfo: ModeInfo
+  sequence: BigInt
+}
+
+type ModeInfo @entity {
+  id: ID!
+  single: ModeInfoSingle
+  multi: ModeInfoMulti
+}
+
+type ModeInfoSingle @entity {
+  id: ID!
+  mode: SignMode
+}
+
+enum SignMode {
+  SIGN_MODE_UNSPECIFIED
+  SIGN_MODE_DIRECT
+  SIGN_MODE_TEXTUAL
+  SIGN_MODE_LEGACY_AMINO_JSON
+}
+
+type ModeInfoMulti @entity {
+  id: ID!
+  bitarray: CompactBitArray
+  modeInfos: [ModeInfo!]
+}
+
+type CompactBitArray @entity {
+  id: ID!
+  extraBitsStored: BigInt
+  elems: Bytes
+}
+
+type Fee @entity {
+  id: ID!
+  amount: [Coin!]
+  gasLimit: BigInt
+  payer: String
+  granter: String
+}
+
+type Coin @entity {
+  id: ID!
+  denom: String
+  amount: String
+}
+
+type Tip @entity {
+  id: ID!
+  amount: [Coin!]
+  tipper: String
+}
+
+type ResponseDeliverTx @entity {
+  id: ID!
+  code: BigInt
+  data: Bytes
+  log: String
+  info: String
+  gasWanted: BigInt
+  gasUsed: BigInt
+  events: [Event!]
+  codespace: String
+}
+
+type ValidatorSetUpdates @entity {
+  id: ID!
+  validatorUpdates: [Validator!]
+}
+
+"Reward is not auto-generated but necessary"
+type Reward @entity {
+  id: ID!
+  amount: String
+  validator: String
 }

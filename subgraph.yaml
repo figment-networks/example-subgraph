@@ -1,27 +1,42 @@
-specVersion: 0.0.2
-description: Gravatar for Ethereum
-repository: https://github.com/graphprotocol/example-subgraph
+specVersion: 0.0.5
+description: Cosmos Example
+repository: https://github.com/figment-networks/subgraph-cosmos-example
 schema:
   file: ./schema.graphql
 dataSources:
-  - kind: ethereum/contract
-    name: Gravity
-    network: mainnet
+  - kind: cosmos
+    name: GetBlockAndRewards
+    network: cosmoshub-4
     source:
-      address: '0x2E645469f354BB4F5c8a05B3b30A929361cf77eC'
-      abi: Gravity
+      startBlock: 0
     mapping:
-      kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - Gravatar
-      abis:
-        - name: Gravity
-          file: ./abis/Gravity.json
+        - BlockID
+        - Commit
+        - CommitSig
+        - Consensus
+        - DuplicateVoteEvidence
+        - EventVote
+        - Evidence
+        - Header
+        - LightBlock
+        - LightClientAttackEvidence
+        - PartSetHeader
+        - PublicKey
+        - ResponseDeliverTx
+        - ResponseEndBlock
+        - Reward
+        - SignedHeader
+        - Timestamp
+        - TxResult
+        - Validator
+        - ValidatorSet
+        - ValidatorUpdate
+      blockHandlers:
+        - handler: handleBlock
       eventHandlers:
-        - event: NewGravatar(uint256,address,string,string)
-          handler: handleNewGravatar
-        - event: UpdatedGravatar(uint256,address,string,string)
-          handler: handleUpdatedGravatar
+        - event: rewards
+          handler: handleReward
       file: ./src/mapping.ts

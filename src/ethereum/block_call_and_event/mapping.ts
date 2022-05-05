@@ -1,5 +1,10 @@
-import { NewGravatar, UpdatedGravatar } from '../generated/Gravity/Gravity'
-import { Gravatar } from '../generated/schema'
+import { ethereum } from "@graphprotocol/graph-ts";
+import { NewGravatar, UpdatedGravatar, UpdateGravatarNameCall, UpdateGravatarImageCall, CreateGravatarCall } from '../../../generated/Gravity/Gravity'
+import { Gravatar } from '../../../generated/schema'
+
+export function handleNewBlock(block: ethereum.Block): void {}
+
+export function handleCreateGravatar(call: CreateGravatarCall): void {}
 
 export function handleNewGravatar(event: NewGravatar): void {
   let gravatar = new Gravatar(event.params.id.toHex())

@@ -8,9 +8,9 @@ dataSources:
 # Ethereum Gravity contract with Block, Call and Event handlers
   - kind: ethereum/contract
     name: EthereumBlockCallAndEventHandlers
-    network: mainnet
+    network: {{ethereum.network}}
     source:
-      address: '0x2E645469f354BB4F5c8a05B3b30A929361cf77eC'
+      address: '{{ethereum.address}}'
       abi: Gravity
     mapping:
       kind: ethereum/events
@@ -38,9 +38,9 @@ dataSources:
 # Ethereum Gravity contract using call handlers for Gravatar changes
   - kind: ethereum/contract
     name: EthereumCallHandlers
-    network: mainnet
+    network: {{ethereum.network}}
     source:
-      address: '0x2E645469f354BB4F5c8a05B3b30A929361cf77eC'
+      address: '{{ethereum.address}}'
       abi: Gravity
     mapping:
       kind: ethereum/events
@@ -63,7 +63,7 @@ dataSources:
 # Cosmos Block handlers
   - kind: cosmos
     name: CosmosBlockHandlers
-    network: cosmoshub-4
+    network: {{cosmos.network}}
     source:
       startBlock: 0
     mapping:
@@ -78,7 +78,7 @@ dataSources:
 # Cosmos Event handlers
   - kind: cosmos
     name: CosmosEventHandlers
-    network: cosmoshub-4
+    network: {{cosmos.network}}
     source:
       startBlock: 0
     mapping:
@@ -94,7 +94,7 @@ dataSources:
 # Cosmos Transaction handlers
   - kind: cosmos
     name: CosmosTransactionHandlers
-    network: cosmoshub-4
+    network: {{cosmos.network}}
     source:
       startBlock: 0
     mapping:
@@ -110,7 +110,7 @@ dataSources:
 # Near Block
   - kind: near
     name: NearBlock
-    network: near-mainnet
+    network: {{near.network}}
     source:
       startBlock: 0
     mapping:
@@ -125,7 +125,7 @@ dataSources:
 # Near Receipts
   - kind: near
     name: NearReceipt
-    network: near-mainnet
+    network: {{near.network}}
     source:
       account: "app.good-morning.near"
       startBlock: 50736511

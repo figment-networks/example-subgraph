@@ -1,0 +1,12 @@
+{
+    "ethereum": {
+        "network": "goerli",
+        "address": "0xabc"
+    },
+    "cosmos": {
+        "network": "testnet"
+    },
+    "near": {
+        "network": "near-testnet"
+    }
+}

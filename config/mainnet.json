@@ -1,0 +1,12 @@
+{
+    "ethereum": {
+        "network": "mainnet",
+        "address": "0x123"
+    },
+    "cosmos": {
+        "network": "cosmoshub-4"
+    },
+    "near": {
+        "network": "near-mainnet"
+    }
+}

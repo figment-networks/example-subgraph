@@ -1,50 +1,64 @@
 import { BigInt, log, cosmos } from "@graphprotocol/graph-ts";
 import { cosmos as cosmos_messages } from "graph-cosmos-ts"
 import {
-  BlockID,
-  Commit,
-  CommitSig,
+  Block,
+  Header,
   Consensus,
+  Timestamp,
+  BlockID,
+  PartSetHeader,
+  EvidenceList,
+  Evidence,
   DuplicateVoteEvidence,
   EventVote,
-  Evidence,
-  EvidenceList,
-  Header,
-  LightBlock,
   LightClientAttackEvidence,
-  PartSetHeader,
-  PublicKey,
-  ResponseDeliverTx,
-  ResponseEndBlock,
-  Reward,
+  LightBlock,
   SignedHeader,
-  Timestamp,
-  TxResult,
-  Validator,
+  Commit,
+  CommitSig,
   ValidatorSet,
+  Validator,
+  PublicKey,
+  ResponseBeginBlock,
+  Event,
+  EventAttribute,
+  ResponseEndBlock,
   ValidatorUpdate,
-  Delegation,
-  Coin
+  ConsensusParams,
+  BlockParams,
+  EvidenceParams,
+  Duration,
+  ValidatorParams,
+  VersionParams,
+  TxResult,
+  Tx,
+  TxBody,
+  Any,
+  AuthInfo,
+  SignerInfo,
+  ModeInfo,
+  ModeInfoSingle,
+  ModeInfoMulti,
+  CompactBitArray,
+  Fee,
+  Coin,
+  Tip,
+  ResponseDeliverTx
 } from "../generated/schema";
 
 export function handleBlock(block: cosmos.Block): void {
-  const header = block.header;
-  const blockHash = block.header.hash.toHexString();
-  const height = BigInt.fromString(header.height.toString());
-  const txLen = block.transactions.length;
+  saveBlock(block.header.height.toString(), block);
+}
 
-  for (let index = 0; index < txLen; index++) {
-    const txID = `${blockHash}-${index.toString()}`;
-    const txResult = block.transactions[index];
-
-    saveResponseDeliverTx(txID, txResult);
-    saveTxResult(txID, height, BigInt.fromI32(index), txResult);
-  }
-
-  saveEvidenceList(blockHash, block.evidence)
-  saveEndBlock(blockHash, block.resultEndBlock);
-
-  log.info("BLOCK {} txs: {}", [height.toString(), txLen.toString()]);
+function saveBlock(id: string, b: cosmos.Block): void {
+  const block = new Block(id);
+  block.header = saveHeader(id, b.header);
+  block.evidence = saveEvidenceList(id, b.evidence);
+  block.lastCommit = saveCommit(id, b.lastCommit);
+  block.resultBeginBlock = saveResponseBeginBlock(id, b.resultBeginBlock);
+  block.resultEndBlock = saveResponseEndBlock(id, b.resultEndBlock);
+  block.transactions = saveTxResults(id, b.transactions);
+  block.validatorUpdates = saveValidators(id, b.validatorUpdates);
 }
 
 function saveBlockID(id: string, bID: cosmos.BlockID): string {
@@ -70,7 +84,7 @@ function saveHeader(id: string, h: cosmos.Header): string {
   header.chainId = h.chainId;
   header.height = height;
   header.time = saveTimestamp(id, h.time);
-  header.lastBlockId = h.lastBlockId.hash.toHexString();
+  header.lastBlockId = saveBlockID(id, h.lastBlockId);
   header.lastCommitHash = h.lastCommitHash;
   header.dataHash = h.dataHash;
   header.validatorsHash = h.validatorsHash;
@@ -158,7 +172,7 @@ function saveEventVote(id: string, ev: cosmos.EventVote): string {
   eventVote.eventVoteType = ev.eventVoteType.toString();
   eventVote.height = BigInt.fromString(ev.height.toString());
   eventVote.round = ev.round;
-  eventVote.blockId = ev.blockId.hash.toHexString();
+  eventVote.blockId = saveBlockID(id, ev.blockId);
   eventVote.timestamp = saveTimestamp(id, ev.timestamp);
   eventVote.validatorAddress = ev.validatorAddress;
   eventVote.validatorIndex = ev.validatorIndex;
@@ -167,15 +181,13 @@ function saveEventVote(id: string, ev: cosmos.EventVote): string {
   return id;
 }
 
-function saveLightClientAttackEvidence(
-    id: string,
-    e: cosmos.LightClientAttackEvidence
-): string {
+function saveLightClientAttackEvidence(id: string, e: cosmos.LightClientAttackEvidence): string {
   const lightClientAttackEvidence = new LightClientAttackEvidence(id);
-  lightClientAttackEvidence.conflictingBlock = saveLightBlock(
-      id,
-      e.conflictingBlock
-  );
+  lightClientAttackEvidence.conflictingBlock = saveLightBlock(id, e.conflictingBlock);
+  lightClientAttackEvidence.commonHeight = BigInt.fromString(e.commonHeight.toString());
+  lightClientAttackEvidence.byzantineValidators = saveValidators(id, e.byzantineValidators);
+  lightClientAttackEvidence.totalVotingPower = BigInt.fromString(e.totalVotingPower.toString());
+  lightClientAttackEvidence.timestamp = saveTimestamp(id, e.timestamp);
   lightClientAttackEvidence.save();
   return id;
 }
@@ -200,17 +212,12 @@ function saveValidatorSet(id: string, sh: cosmos.ValidatorSet): string {
   const validatorSet = new ValidatorSet(id);
   validatorSet.validators = saveValidators(id, sh.validators);
   validatorSet.proposer = saveValidator(id, sh.proposer);
-  validatorSet.totalVotingPower = BigInt.fromString(
-      sh.totalVotingPower.toString()
-  );
+  validatorSet.totalVotingPower = BigInt.fromString(sh.totalVotingPower.toString());
   validatorSet.save();
   return id;
 }
 
-function saveValidators(
-    id: string,
-    validators: Array<cosmos.Validator>
-): Array<string> {
+function saveValidators(id: string, validators: Array<cosmos.Validator>): Array<string> {
   let validatorIDs = new Array<string>(validators.length);
   for (let i = 0; i < validators.length; i++) {
     validatorIDs[i] = saveValidator(`${id}-${i}`, validators[i]);
@@ -222,9 +229,7 @@ function saveValidator(id: string, v: cosmos.Validator): string {
   const validator = new Validator(id);
   validator.address = v.address;
   validator.votingPower = BigInt.fromString(v.votingPower.toString());
-  validator.proposerPriority = BigInt.fromString(
-      v.proposerPriority.toString()
-  );
+  validator.proposerPriority = BigInt.fromString(v.proposerPriority.toString());
   validator.pubKey = savePublicKey(v.address.toHexString(), v.pubKey);
   validator.save();
   return id;
@@ -277,56 +282,289 @@ function getBlockIDFlag(bf: cosmos.BlockIDFlag): string {
   }
 }
 
-function saveResponseDeliverTx(
-    id: string,
-    txResult: cosmos.TxResult
-): void {
+function saveResponseDeliverTx(id: string, rd: cosmos.ResponseDeliverTx): string {
   const responseDeliverTx = new ResponseDeliverTx(id);
-  responseDeliverTx.code = new BigInt(txResult.result.code);
-  responseDeliverTx.log = txResult.result.log;
-  responseDeliverTx.info = txResult.result.info;
-  responseDeliverTx.gasWanted = BigInt.fromString(
-      txResult.result.gasWanted.toString()
-  );
-  responseDeliverTx.gasUsed = BigInt.fromString(
-      txResult.result.gasUsed.toString()
-  );
-  responseDeliverTx.codespace = txResult.result.codespace;
+  responseDeliverTx.code = BigInt.fromString(rd.code.toString());
+  responseDeliverTx.data = rd.data;
+  responseDeliverTx.log = rd.log;
+  responseDeliverTx.info = rd.info;
+  responseDeliverTx.gasWanted = BigInt.fromString(rd.gasWanted.toString());
+  responseDeliverTx.gasUsed = BigInt.fromString(rd.gasUsed.toString());
+  responseDeliverTx.events = saveEvents(id, rd.events);
+  responseDeliverTx.codespace = rd.codespace;
   responseDeliverTx.save();
+  return id;
 }
 
-function saveTxResult(
-    id: string,
-    height: BigInt,
-    index: BigInt,
-    txRes: cosmos.TxResult
-): void {
-  const txResult = new TxResult(id);
-  txResult.height = height;
-  txResult.index = index;
-  txResult.result = id;
-  txResult.save();
+function saveAnies(id: string, a: Array<cosmos.Any>): Array<string> {
+  let anyIds = new Array<string>(a.length);
+  for (let i = 0; i < a.length; i++) {
+    anyIds[i] = saveAny(`${id}-${i}`, a[i]);
+  }
+  return anyIds;
+}
 
-  for (let i = 0; i < txRes.tx.body.messages.length; i++) {
-    const msg = txRes.tx.body.messages[i];
-    log.info("MESSAGE TYPE = {}", [msg.typeUrl])
+function saveAny(id: string, a: cosmos.Any): string {
+  const any = new Any(id);
+  any.typeUrl = a.typeUrl;
+  any.value = a.value;
+  any.save();
+  return id;
+}
+
+function saveTxBody(id: string, tb: cosmos.TxBody): string {
+  const txBody = new TxBody(id);
+  txBody.messages = saveAnies(id, tb.messages);
+  txBody.memo = tb.memo;
+  txBody.timeoutHeight = BigInt.fromString(tb.timeoutHeight.toString());
+  txBody.extensionOptions = saveAnies(id, tb.extensionOptions);
+  txBody.nonCriticalExtensionOptions = saveAnies(id, tb.nonCriticalExtensionOptions);
+  txBody.save();
+  return id;
+}
+
+function getSignMode(signMode: cosmos.SignMode): string {
+  switch (signMode) {
+    case cosmos.SignMode.SIGN_MODE_UNSPECIFIED:
+      return "SIGN_MODE_UNSPECIFIED";
+    case cosmos.SignMode.SIGN_MODE_DIRECT:
+      return "SIGN_MODE_DIRECT";
+    case cosmos.SignMode.SIGN_MODE_TEXTUAL:
+      return "SIGN_MODE_TEXTUAL";
+    case cosmos.SignMode.SIGN_MODE_LEGACY_AMINO_JSON:
+      return "SIGN_MODE_LEGACY_AMINO_JSON";
+    default:
+      log.error("unknown SignMode: {}", [signMode.toString()]);
+      return "unknown";
   }
 }
 
-function saveEndBlock(id: string, endBlock: cosmos.ResponseEndBlock): void {
-  const responseEndBlock = new ResponseEndBlock(id);
-  responseEndBlock.validatorUpdates = saveValidatorUpdates(
-      id,
-      endBlock.validatorUpdates
-  );
-  responseEndBlock.consensusParamUpdates = id;
-  responseEndBlock.save();
+function saveModeInfoSingle(id: string, mi: cosmos.ModeInfoSingle): string {
+  const modeInfoSingle = new ModeInfoSingle(id);
+  modeInfoSingle.mode = getSignMode(mi.mode);
+  modeInfoSingle.save();
+  return id;
 }
 
-function saveValidatorUpdates(
-    id: string,
-    validators: Array<cosmos.ValidatorUpdate>
-): Array<string> {
+function saveCompactBitArray(id: string, cba: cosmos.CompactBitArray): string {
+  const compactBitArray = new CompactBitArray(id);
+  compactBitArray.extraBitsStored = new BigInt(cba.extraBitsStored);
+  compactBitArray.elems = cba.elems;
+  compactBitArray.save();
+  return id;
+}
+
+function saveModeInfoMulti(id: string, mi: cosmos.ModeInfoMulti): string {
+  const modeInfoMulti = new ModeInfoMulti(id);
+  modeInfoMulti.bitarray = saveCompactBitArray(id, mi.bitarray);
+  modeInfoMulti.modeInfos = saveModeInfos(id, mi.modeInfos);
+  modeInfoMulti.save();
+  return id;
+}
+
+function saveModeInfos(id: string, modeInfos: Array<cosmos.ModeInfo>): Array<string> {
+  let modeInfoIds = new Array<string>(modeInfos.length);
+  for (let i = 0; i < modeInfos.length; i++) {
+    modeInfoIds[i] = saveModeInfo(`${id}-${i}`, modeInfos[i]);
+  }
+  return modeInfoIds;
+}
+
+function saveModeInfo(id: string, mi: cosmos.ModeInfo): string {
+  const modeInfo = new ModeInfo(id);
+  modeInfo.single = saveModeInfoSingle(id, mi.single);
+  modeInfo.multi = saveModeInfoMulti(id, mi.multi);
+  modeInfo.save();
+  return id;
+}
+
+function saveSignerInfos(id: string, signerInfos: Array<cosmos.SignerInfo>): Array<string> {
+  let signerInfoIds = new Array<string>(signerInfos.length);
+  for (let i = 0; i < signerInfos.length; i++) {
+    signerInfoIds[i] = saveSignerInfo(`${id}-${i}`, signerInfos[i]);
+  }
+  return signerInfoIds;
+}
+
+function saveSignerInfo(id: string, si: cosmos.SignerInfo): string {
+  const signerInfo = new SignerInfo(id);
+  signerInfo.publicKey = saveAny(id, si.publicKey);
+  signerInfo.modeInfo = saveModeInfo(id, si.modeInfo);
+  signerInfo.sequence = BigInt.fromString(si.sequence.toString());
+  signerInfo.save();
+  return id;
+}
+
+function saveFee(id: string, f: cosmos.Fee): string {
+  const fee = new Fee(id);
+  fee.amount = saveCoins(id, f.amount);
+  fee.gasLimit = BigInt.fromString(f.gasLimit.toString());
+  fee.payer = f.payer;
+  fee.granter = f.granter;
+  fee.save();
+  return id;
+}
+
+function saveTip(id: string, t: cosmos.Tip): string {
+  const tip = new Tip(id);
+  tip.amount = saveCoins(id, t.amount);
+  tip.tipper = t.tipper;
+  tip.save();
+  return id;
+}
+
+function saveCoins(id: string, coins: Array<cosmos.Coin>): Array<string> {
+  let coinIds = new Array<string>(coins.length);
+  for (let i = 0; i < coins.length; i++) {
+    coinIds[i] = saveCoin(`${id}-${i}`, coins[i]);
+  }
+  return coinIds;
+}
+
+function saveCoin(id: string, c: cosmos.Coin): string {
+  const coin = new Coin(id);
+  coin.denom = c.denom;
+  coin.amount = c.amount;
+  coin.save();
+  return id;
+}
+
+function saveAuthInfo(id: string, ai: cosmos.AuthInfo): string {
+  const authInfo = new AuthInfo(id);
+  authInfo.signerInfos = saveSignerInfos(id, ai.signerInfos);
+  authInfo.fee = saveFee(id, ai.fee);
+  authInfo.tip = saveTip(id, ai.tip);
+  authInfo.save();
+  return id;
+}
+
+function saveTx(id: string, t: cosmos.Tx): string {
+  const tx = new Tx(id);
+  tx.body = saveTxBody(id, t.body);
+  tx.authInfo = saveAuthInfo(id, t.authInfo);
+  tx.signatures = t.signatures;
+  tx.save();
+  return id;
+}
+
+function saveTxResults(id: string, txReses: Array<cosmos.TxResult>): Array<string> {
+  let txIds = new Array<string>(txReses.length);
+  for (let i = 0; i < txReses.length; i++) {
+    txIds[i] = saveTxResult(`${id}-${i}`, txReses[i]);
+  }
+  return txIds;
+}
+
+function saveTxResult(id: string, txRes: cosmos.TxResult): string {
+  const txResult = new TxResult(id);
+  txResult.height = BigInt.fromString(txRes.height.toString());
+  txResult.index = BigInt.fromString(txRes.index.toString());
+  txResult.tx = saveTx(id, txRes.tx);
+  txResult.result = saveResponseDeliverTx(id, txRes.result);
+  txResult.hash = txRes.hash;
+  txResult.save();
+  return id;
+}
+
+function saveResponseEndBlock(id: string, endBlock: cosmos.ResponseEndBlock): string {
+  const responseEndBlock = new ResponseEndBlock(id);
+  responseEndBlock.validatorUpdates = saveValidatorUpdates(id, endBlock.validatorUpdates);
+  responseEndBlock.consensusParamUpdates = saveConsensusParams(id, endBlock.consensusParamUpdates);
+  responseEndBlock.events = saveEvents(id, endBlock.events);
+  responseEndBlock.save();
+  return id;
+}
+
+function saveConsensusParams(id: string, cp: cosmos.ConsensusParams): string {
+  const consensusParams = new ConsensusParams(id);
+  consensusParams.block = saveBlockParams(id, cp.block);
+  consensusParams.evidence = saveEvidenceParams(id, cp.evidence);
+  consensusParams.validator = saveValidatorParams(id, cp.validator);
+  consensusParams.version = saveVersionParams(id, cp.version);
+  consensusParams.save();
+  return id;
+}
+
+function saveBlockParams(id: string, bp: cosmos.BlockParams): string {
+  const blockParams = new BlockParams(id);
+  blockParams.maxBytes = BigInt.fromString(bp.maxBytes.toString());
+  blockParams.maxGas = BigInt.fromString(bp.maxGas.toString());
+  blockParams.save()
+  return id;
+}
+
+function saveEvidenceParams(id: string, ep: cosmos.EvidenceParams): string {
+  const evidenceParams = new EvidenceParams(id);
+  evidenceParams.maxAgeNumBlocks = BigInt.fromString(ep.maxAgeNumBlocks.toString());
+  evidenceParams.maxAgeDuration = saveDuration(id, ep.maxAgeDuration);
+  evidenceParams.maxBytes = BigInt.fromString(ep.maxBytes.toString());
+  evidenceParams.save()
+  return id;
+}
+
+function saveValidatorParams(id: string, vp: cosmos.ValidatorParams): string {
+  const validatorParams = new ValidatorParams(id);
+  validatorParams.pubKeyTypes = vp.pubKeyTypes;
+  validatorParams.save()
+  return id;
+}
+
+function saveVersionParams(id: string, vp: cosmos.VersionParams): string {
+  const versionParams = new VersionParams(id);
+  versionParams.appVersion = BigInt.fromString(vp.appVersion.toString());
+  versionParams.save()
+  return id;
+}
+
+function saveDuration(id: string, d: cosmos.Duration): string {
+  const duration = new Duration(id);
+  duration.seconds = BigInt.fromString(d.seconds.toString());
+  duration.nanos = d.nanos;
+  duration.save();
+  return id;
+}
+
+function saveResponseBeginBlock(id: string, beginBlock: cosmos.ResponseBeginBlock): string {
+  const responseBeginBlock = new ResponseBeginBlock(id);
+  responseBeginBlock.events = saveEvents(id, beginBlock.events);
+  responseBeginBlock.save();
+  return id;
+}
+
+function saveEvents(id: string, events: Array<cosmos.Event>): Array<string> {
+  let eventIds = new Array<string>(events.length);
+  for (let i = 0; i < events.length; i++) {
+    eventIds[i] = saveEvent(`${id}-${i}`, events[i]);
+  }
+  return eventIds;
+}
+
+function saveEvent(id: string, e: cosmos.Event): string {
+  const event = new Event(id);
+  event.eventType = e.eventType;
+  event.attributes = saveEventAttributes(id, e.attributes)
+  event.save()
+  return id;
+}
+
+function saveEventAttributes(id: string, eventAttributes: Array<cosmos.EventAttribute>): Array<string> {
+  let eventAttributeIds = new Array<string>(eventAttributes.length);
+  for (let i = 0; i < eventAttributes.length; i++) {
+    eventAttributeIds[i] = saveEventAttribute(`${id}-${i}`, eventAttributes[i]);
+  }
+  return eventAttributeIds;
+}
+
+function saveEventAttribute(id: string, ea: cosmos.EventAttribute): string {
+  const eventAttribute = new EventAttribute(id);
+  eventAttribute.key = ea.key;
+  eventAttribute.value = ea.value;
+  eventAttribute.index = ea.index;
+  eventAttribute.save()
+  return id;
+}
+
+function saveValidatorUpdates(id: string, validators: Array<cosmos.ValidatorUpdate>): Array<string> {
   let validatorIDs = new Array<string>(validators.length);
   for (let i = 0; i < validators.length; i++) {
     const v = validators[i];
@@ -337,10 +575,7 @@ function saveValidatorUpdates(
   return validatorIDs;
 }
 
-function saveValidatorUpdate(
-    id: string,
-    v: cosmos.ValidatorUpdate
-): string {
+function saveValidatorUpdate(id: string, v: cosmos.ValidatorUpdate): string {
   const validatorUpdate = new ValidatorUpdate(id);
   validatorUpdate.address = v.address;
   validatorUpdate.pubKey = savePublicKey(v.address.toHexString(), v.pubKey);
@@ -360,47 +595,5 @@ function savePublicKey(id: string, publicKey: cosmos.PublicKey): string {
   pk.ed25519 = publicKey.ed25519;
   pk.secp256k1 = publicKey.secp256k1;
   pk.save();
-  return id;
-}
-
-export function handleReward(eventData: cosmos.EventData): void {
-  const height = eventData.block.header.height;
-  const amount = eventData.event.attributes[0].value;
-  const validator = eventData.event.attributes[1].value;
-
-  let reward = new Reward(`${height}-${validator}`);
-
-  reward.amount = amount;
-  reward.validator = validator;
-
-  reward.save();
-}
-
-export function handleTx(transactionData: cosmos.TransactionData): void {
-  const id = `${transactionData.block.header.hash.toHexString()}-${transactionData.tx.index}`;
-  const messages = transactionData.tx.tx.body.messages;
-
-  for (let i = 0; i < messages.length; i++) {
-    let msgType = messages[i].typeUrl;
-    let msgValue = messages[i].value as Uint8Array;
-    if (msgType == "/cosmos.staking.v1beta1.MsgDelegate") {
-      saveDelegation(id, cosmos_messages.staking.v1beta1.decodeMsgDelegate(msgValue)) // The message needs to be decoded to access its attributes.
-    }
-  }
-}
-
-function saveDelegation(id: string, message: cosmos_messages.staking.v1beta1.MsgDelegate): void {
-  const msg = new Delegation(id);
-  msg.delegatorAddress = message.delegator_address;
-  msg.validatorAddress = message.validator_address;
-  msg.amount = saveCoin(id, message.amount as cosmos_messages.base.v1beta1.Coin);
-  msg.save();
-}
-
-function saveCoin(id: string, c: cosmos_messages.base.v1beta1.Coin): string {
-  const coin = new Coin(id);
-  coin.amount = c.amount;
-  coin.denom = c.denom;
-  coin.save();
   return id;
 }

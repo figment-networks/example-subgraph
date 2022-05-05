@@ -354,6 +354,7 @@ type ValidatorSetUpdates @entity {
   validatorUpdates: [Validator!]
 }
 
+# From here on, these are the custom types for handlers and messages.
 "Reward is not auto-generated but necessary"
 type Reward @entity {
   id: ID!

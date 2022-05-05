@@ -43,7 +43,7 @@ import {
   Fee,
   Coin,
   Tip,
-  ResponseDeliverTx
+  ResponseDeliverTx,
 } from "../generated/schema";
 
 export function handleBlock(block: cosmos.Block): void {
@@ -59,6 +59,7 @@ function saveBlock(id: string, b: cosmos.Block): void {
   block.resultEndBlock = saveResponseEndBlock(id, b.resultEndBlock);
   block.transactions = saveTxResults(id, b.transactions);
   block.validatorUpdates = saveValidators(id, b.validatorUpdates);
+  block.save();
 }
 
 function saveBlockID(id: string, bID: cosmos.BlockID): string {
@@ -167,9 +168,25 @@ function saveDuplicateVoteEvidence(
   return id;
 }
 
+function getSignedMsgType(signedMsgType: cosmos.SignedMsgType): string {
+  switch (signedMsgType) {
+    case cosmos.SignedMsgType.SIGNED_MSG_TYPE_UNKNOWN:
+      return "SIGNED_MSG_TYPE_UNKNOWN";
+    case cosmos.SignedMsgType.SIGNED_MSG_TYPE_PREVOTE:
+      return "SIGNED_MSG_TYPE_PREVOTE";
+    case cosmos.SignedMsgType.SIGNED_MSG_TYPE_PRECOMMIT:
+      return "SIGNED_MSG_TYPE_PRECOMMIT";
+    case cosmos.SignedMsgType.SIGNED_MSG_TYPE_PROPOSAL:
+      return "SIGNED_MSG_TYPE_PROPOSAL";
+    default:
+      log.error("unknown signedMsgType: {}", [signedMsgType.toString()]);
+      return "unknown";
+  }
+}
+
 function saveEventVote(id: string, ev: cosmos.EventVote): string {
   const eventVote = new EventVote(id);
-  eventVote.eventVoteType = ev.eventVoteType.toString();
+  eventVote.eventVoteType = getSignedMsgType(ev.eventVoteType);
   eventVote.height = BigInt.fromString(ev.height.toString());
   eventVote.round = ev.round;
   eventVote.blockId = saveBlockID(id, ev.blockId);

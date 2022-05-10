@@ -6,9 +6,9 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "create-local": "graph create osmosis-event-example --node http://localhost:8020",
-    "deploy-local": "graph deploy osmosis-event-example -l v0.1.0 --ipfs http://localhost:5001 --node http://localhost:8020",
-    "remove-local": "graph remove osmosis-event-example --node http://localhost:8020",
+    "create-local": "graph create osmosis-event-example --node http://0.0.0.0:8020",
+    "deploy-local": "graph deploy osmosis-event-example -l v0.1.0 --ipfs http://0.0.0.0:5001 --node http://0.0.0.0:8020",
+    "remove-local": "graph remove osmosis-event-example --node http://0.0.0.0:8020",
     "create": "graph create osmosis-event-example --node https://api.thegraph.com/deploy/",
     "deploy": "graph deploy osmosis-event-example --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
   },

@@ -236,6 +236,12 @@
     which "2.0.2"
     yaml "1.9.2"
 
+"@graphprotocol/graph-cosmos-ts@https://github.com/figment-networks/graph-cosmos-ts.git#osmosis":
+  version "0.1.0-alpha.0"
+  resolved "https://github.com/figment-networks/graph-cosmos-ts.git#d42112c3ae6fb707f12023969223d67a3339cb1a"
+  dependencies:
+    as-proto "^0.2.3"
+
 "@graphprotocol/graph-ts@https://github.com/figment-networks/graph-ts.git#cosmos":
   version "0.27.0-alpha.0"
   resolved "https://github.com/figment-networks/graph-ts.git#99f26e493e3bad84fdbc598352625b23e102daab"
@@ -432,6 +438,11 @@ argparse@^1.0.7:
   integrity sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==
   dependencies:
     sprintf-js "~1.0.2"
+
+as-proto@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/as-proto/-/as-proto-0.2.3.tgz#34107a1051e746324e258062822cb9e18b58e8c4"
+  integrity sha512-JwWFcTBYVTOzJEMqXtZfU/L9bYzR6rrLFJBA1DC4kRs0zE12titZtWhpnBAAmV27dhMSWauqOBJgbt5OrK2rcw==
 
 asap@~2.0.6:
   version "2.0.6"

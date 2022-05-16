@@ -16,6 +16,6 @@ dataSources:
         - Delegation
         - Coin
       messageHandlers:
-        - type_url: /cosmos.staking.v1beta1.MsgDelegate
+        - message: /cosmos.staking.v1beta1.MsgDelegate
           handler: handleMsgDelegate
       file: ./src/mapping.ts

@@ -260,14 +260,34 @@ type Tx @entity {
 
 type TxBody @entity {
   id: ID!
-  messages: [Any!]
+  messages: [Message!]
   memo: String
   timeoutHeight: BigInt
-  extensionOptions: [Any!]
-  nonCriticalExtensionOptions: [Any!]
+  extensionOptions: [ExtensionOption!]
+  nonCriticalExtensionOptions: [ExtensionOption!]
 }
 
-type Any @entity {
+type Message implements Any @entity {
+  id: ID!
+  index: Int!
+  typeUrl: String
+  value: Bytes
+}
+
+type ExtensionOption implements Any @entity {
+  id: ID!
+  index: Int!
+  typeUrl: String
+  value: Bytes
+}
+
+type PublicKeyAny implements Any @entity {
+  id: ID!
+  typeUrl: String
+  value: Bytes
+}
+
+interface Any {
   id: ID!
   typeUrl: String
   value: Bytes
@@ -282,7 +302,7 @@ type AuthInfo @entity {
 
 type SignerInfo @entity {
   id: ID!
-  publicKey: Any
+  publicKey: PublicKeyAny
   modeInfo: ModeInfo
   sequence: BigInt
 }

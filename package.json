@@ -1,14 +1,14 @@
 {
   "name": "cosmos-example",
   "version": "0.1.0",
-  "repository": "https://github.com/figment-networks/subgraph-cosmos-example",
+  "repository": "https://github.com/figment-networks/example-subgraph",
   "license": "MIT",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "create-local": "graph create cosmos-example --node http://localhost:8020",
-    "deploy-local": "graph deploy cosmos-example -l v0.1.0 --ipfs http://localhost:5001 --node http://localhost:8020",
-    "remove-local": "graph remove cosmos-example --node http://localhost:8020"
+    "create-local": "graph create cosmos-example --node http://0.0.0.0:8020",
+    "deploy-local": "graph deploy cosmos-example -l v0.1.0 --ipfs http://0.0.0.0:5001 --node http://0.0.0.0:8020",
+    "remove-local": "graph remove cosmos-example --node http://0.0.0.0:8020"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "https://github.com/figment-networks/graph-cli.git#cosmos",

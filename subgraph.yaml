@@ -1,6 +1,6 @@
 specVersion: 0.0.5
 description: Cosmos Example
-repository: https://github.com/figment-networks/subgraph-cosmos-example
+repository: https://github.com/figment-networks/example-subgraph
 schema:
   file: ./schema.graphql
 dataSources:

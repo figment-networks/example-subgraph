@@ -1,20 +1,23 @@
 specVersion: 0.0.5
-description: Cosmos Example
-repository: https://github.com/figment-networks/subgraph-cosmos-example
+description: Osmosis Data dump
+repository: https://github.com/figment-networks/subgraph-example
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: cosmos
     name: GetBlockAndRewards
-    network: cosmoshub-4
+    network: osmosis-1
     source:
       startBlock: 0
     mapping:
-      apiVersion: 0.0.5
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Block
         - Header
+        - ExtensionOption
+        - Message
+        - PublicKeyAny
         - Consensus
         - Timestamp
         - BlockID
@@ -45,7 +48,6 @@ dataSources:
         - TxResult
         - Tx
         - TxBody
-        - Any
         - AuthInfo
         - SignerInfo
         - ModeInfo

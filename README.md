@@ -1,4 +1,4 @@
-# subgraph-cosmos-example
+# Osmosis data dump
 
 ## Setup
 
@@ -47,19 +47,24 @@ yarn deploy-local
   block(id: "5200793") {
     id
     header {
+      id
       version {
+        id
         block
         app
       }
       chainId
       height
       time {
+        id
         seconds
         nanos
       }
       lastBlockId {
+        id
         hash
         partSetHeader {
+          id
           total
           hash
         }
@@ -73,26 +78,92 @@ yarn deploy-local
       lastResultsHash
       evidenceHash
       proposerAddress
+      hash
     }
     evidence {
+      id
       evidence {
+        duplicateVoteEvidence {
+          id
+          voteA {
+            id
+            eventVoteType
+            height
+            round
+            blockId {
+              id
+              hash
+              partSetHeader {
+                id
+                total
+                hash
+              }
+            }
+            timestamp {
+              id
+              seconds
+              nanos
+            }
+            validatorAddress
+            validatorIndex
+            signature
+          }
+          voteB {
+            id
+            eventVoteType
+            height
+            round
+            blockId {
+              id
+              hash
+              partSetHeader {
+                id
+                total
+                hash
+              }
+            }
+            timestamp {
+              id
+              seconds
+              nanos
+            }
+            validatorAddress
+            validatorIndex
+            signature
+          }
+          totalVotingPower
+          validatorPower
+          timestamp {
+            id
+            seconds
+            nanos
+          }
+        }
         lightClientAttackEvidence {
+          id
           conflictingBlock {
+            id
             signedHeader {
+              id
               header {
+                id
                 version {
+                  id
                   block
                   app
                 }
                 chainId
                 height
                 time {
+                  id
                   seconds
                   nanos
                 }
                 lastBlockId {
+                  id
                   hash
                   partSetHeader {
+                    id
                     total
                     hash
                   }
@@ -106,108 +177,51 @@ yarn deploy-local
                 lastResultsHash
                 evidenceHash
                 proposerAddress
-              }
-              commit {
-                height
-                round
-                blockId {
-                  hash
-                  partSetHeader {
-                    total
-                    hash
-                  }
-                }
-                signatures {
-                  blockIdFlag
-                  validatorAddress
-                  timestamp {
-                    seconds
-                    nanos
-                  }
-                  signature
-                }
+                hash
               }
             }
             validatorSet {
+              id
               validators {
-                address,
-                votingPower,
-                proposerPriority,
+                id
+                address
                 pubKey {
-                  ed25519,
+                  id
+                  ed25519
                   secp256k1
                 }
-              },
+                votingPower
+                proposerPriority
+              }
               proposer {
-                address,
-                votingPower,
-                proposerPriority,
+                id
+                address
                 pubKey {
-                  ed25519,
+                  id
+                  ed25519
                   secp256k1
                 }
-              },
+                votingPower
+                proposerPriority
+              }
               totalVotingPower
             }
           }
           commonHeight
           byzantineValidators {
-            address,
-            votingPower,
-            proposerPriority,
+            id
+            address
             pubKey {
-              ed25519,
+              id
+              ed25519
               secp256k1
             }
+            votingPower
+            proposerPriority
           }
           totalVotingPower
           timestamp {
-            seconds
-            nanos
-          }
-        }
-        duplicateVoteEvidence {
-          voteA {
-            eventVoteType
-            height
-            round
-            blockId {
-              hash
-              partSetHeader {
-                total
-                hash
-              }
-            }
-            timestamp {
-              seconds
-              nanos
-            }
-            validatorAddress
-            validatorIndex
-            signature
-          }
-          voteB {
-            eventVoteType
-            height
-            round
-            blockId {
-              hash
-              partSetHeader {
-                total
-                hash
-              }
-            }
-            timestamp {
-              seconds
-              nanos
-            }
-            validatorAddress
-            validatorIndex
-            signature
-          }
-          totalVotingPower
-          validatorPower
-          timestamp {
+            id
             seconds
             nanos
           }
@@ -215,172 +229,172 @@ yarn deploy-local
       }
     }
     lastCommit {
+      id
       height
       round
       blockId {
+        id
         hash
         partSetHeader {
-          total
-          hash
+          id
         }
       }
       signatures {
+        id
         blockIdFlag
         validatorAddress
         timestamp {
+          id
           seconds
           nanos
         }
         signature
       }
     }
-    resultBeginBlock {
-      events {
-        eventType,
-        attributes {
-          key,
-          value,
-          index
-        }
-      }
-    }
     resultEndBlock {
+      id
       validatorUpdates {
-        address,
+        id
+        address
         pubKey {
-    			ed25519,
-    			secp256k1
-        },
-        power
-      },
-      consensusParamUpdates {
-        block {
-          maxBytes,
-          maxGas
-        },
-        evidence {
-          maxAgeNumBlocks,
-          maxAgeDuration {
-            seconds,
-            nanos
-          },
-          maxBytes
-        },
-        validator {
-          pubKeyTypes
-        },
-        version {
-          appVersion
+          id
+          ed25519
+          secp256k1
         }
-      },
-      events {
-      	eventType,
-        attributes {
-          key,
-          value,
-          index
+        power
+      }
+      consensusParamUpdates {
+        id
+        block {
+          id
+          maxBytes
+          maxGas
+        }
+        evidence {
+          id
+          maxAgeNumBlocks
+          maxAgeDuration {
+            id
+          }
+          maxBytes
+        }
+        validator {
+          id
+          pubKeyTypes
+        }
+        version {
+          id
+          appVersion
         }
       }
     }
     transactions {
-      height,
-      index,
+      id
+      height
+      index
       tx {
+        id
         body {
+          id
           messages {
-            typeUrl,
-            value
-          },
-          memo,
-          timeoutHeight,
-          extensionOptions {
-            typeUrl,
-            value
-          },
-          nonCriticalExtensionOptions {
-            typeUrl,
-            value
+            id
+            index
+            typeUrl
           }
-        },
+          memo
+          timeoutHeight
+          extensionOptions {
+            id
+            index
+            typeUrl
+          }
+          nonCriticalExtensionOptions {
+            id
+            index
+            typeUrl
+          }
+        }
         authInfo {
+          id
           signerInfos {
+            id
             publicKey {
-              typeUrl,
-              value
-            },
+              id
+              typeUrl
+            }
             modeInfo {
+              id
               single {
+                id
                 mode
-              },
+              }
               multi {
+                id
                 bitarray {
-                  extraBitsStored,
+                  id
+                  extraBitsStored
                   elems
-                },
+                }
                 modeInfos {
+                  id
                   single {
+                    id
                     mode
-                  },
+                  }
                   multi {
+                    id
                     bitarray {
-                      extraBitsStored,
-                      elems
-                    },
-                    modeInfos {
                       id
+                      extraBitsStored
+                      elems
                     }
                   }
                 }
               }
-            },
+            }
             sequence
-          },
+          }
           fee {
             amount {
-              denom,
+              id
+              denom
               amount
-            },
-            gasLimit,
-            payer,
+            }
+            gasLimit
+            payer
             granter
-          },
+          }
           tip {
             amount {
-              denom,
+              id
+              denom
               amount
-            },
+            }
             tipper
           }
-        },
+        }
         signatures
-      },
+      }
       result {
-        code,
-        data,
-        log,
-        info,
-        gasWanted,
-        gasUsed,
-        events {
-          eventType,
-          attributes {
-            key,
-            value,
-            index
-          }
-        },
+        id
+        code
+        data
+        log
+        info
+        gasWanted
+        gasUsed
         codespace
-      },
+      }
       hash
     }
     validatorUpdates {
-      address,
-      votingPower,
-      proposerPriority,
+      id
+      address
       pubKey {
-        ed25519,
-        secp256k1
+        id
       }
+      votingPower
+      proposerPriority
     }
   }
 }

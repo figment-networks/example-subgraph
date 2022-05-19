@@ -1,6 +1,6 @@
 specVersion: 0.0.5
 description: Osmosis Data dump
-repository: https://github.com/figment-networks/subgraph-example
+repository: https://github.com/figment-networks/example-subgraph
 schema:
   file: ./schema.graphql
 dataSources:

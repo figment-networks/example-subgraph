@@ -5,8 +5,8 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: cosmos
-    name: GetBlockAndRewards
-    network: cosmoshub-4
+    name: CosmosHub
+    network: osmosis-1
     source:
       startBlock: 0
     mapping:

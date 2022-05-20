@@ -1,5 +1,5 @@
 import { BigInt, log, cosmos } from "@graphprotocol/graph-ts";
-import { cosmos as cosmos_messages } from "graph-cosmos-ts";
+import { cosmos as cosmos_messages } from "@graphprotocol/cosmoshub-ts";
 import {
   Block,
   Header,
@@ -723,8 +723,8 @@ function saveValidatorUpdate(id: string, v: cosmos.ValidatorUpdate): string {
 
 function savePublicKey(publicKey: cosmos.PublicKey): string {
   const id = publicKey.ed25519
-    ? publicKey.ed25519.toString()
-    : publicKey.secp256k1.toString();
+    ? publicKey.ed25519.toHexString()
+    : publicKey.secp256k1.toHexString()
   let pk = PublicKey.load(id);
   if (pk !== null) {
     log.debug("Validator with public key: {} already exists", [id]);

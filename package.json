@@ -6,14 +6,14 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "create-local": "graph create cosmos-example --node http://0.0.0.0:8020",
-    "deploy-local": "graph deploy cosmos-example -l v0.1.0 --ipfs http://0.0.0.0:5001 --node http://0.0.0.0:8020",
-    "remove-local": "graph remove cosmos-example --node http://0.0.0.0:8020"
+    "create-local": "graph create cosmos-example --node http://localhost:8020",
+    "deploy-local": "graph deploy cosmos-example -l v0.1.0 --ipfs http://localhost:5001 --node http://localhost:8020",
+    "remove-local": "graph remove cosmos-example --node http://localhost:8020"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "https://github.com/figment-networks/graph-cli.git#cosmos",
-    "@graphprotocol/graph-ts": "https://github.com/figment-networks/graph-ts.git#cosmos",
-    "graph-cosmos-ts": "https://github.com/figment-networks/graph-cosmos-ts"
+    "@graphprotocol/graph-cli": "^0.30.0",
+    "@graphprotocol/graph-ts": "^0.27.0",
+    "@graphprotocol/cosmoshub-ts": "https://github.com/figment-networks/graph-cosmos-ts"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",

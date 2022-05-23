@@ -1,26 +1,40 @@
-# subgraph-cosmos-example
+# Cosmos Data Dump Example Subgraph
 
-## Setup
+This example subgraph decodes full blocks using all available proto definitions and saves them to the subgraph store. The following steps will setup a local firehose instance and deploy the example subgraph. This can also be done using a firehose instance deployed to the hosted service.
 
-1. Run ingestor
+## Setup Local Firehose
 
-```bash
-git clone https://github.com/figment-networks/ingestor-tendermint.git
-```
-
-2. Run graph-node
+1. Clone firehose-cosmos
 
 ```bash
-git clone https://github.com/figment-networks/graph-node.git
+git clone https://github.com/figment-networks/firehose-cosmos.git
 ```
 
-3. Run gaia
+2. Run the bootstrap script to download gaia and setup the gaia home directory
 
 ```bash
-git clone https://github.com/figment-networks/gaia.git
+cd firehose-cosmos/devel/cosmoshub4
+./boostrap.sh
 ```
 
-## Build
+In case if you'd like to reset your local copy, remove the `./tmp` directory, or
+run the script with an extra environment variable:
+
+```bash
+CLEANUP=1 ./bootstrap.sh
+```
+
+3. After bootstrapping is complete, start the firehose:
+
+```bash
+./start.sh
+```
+
+This will start the node from genesis, so give it some time until it start syncing.
+
+You may check on the node's status (if its running) by opening `http://localhost:26657/status` in your browser.
+
+## Build the subgraph
 
 ```bash
 yarn
@@ -41,6 +55,14 @@ yarn deploy-local
 ```
 
 ## Query subgraph
+
+```bash
+The subgraph can be queried though the endpoint: 
+
+http://localhost:8000/subgraphs/name/cosmos-data-dump-example/graphql
+
+The query will print all saved data from a block given its height.
+```
 
 ```bash
 {

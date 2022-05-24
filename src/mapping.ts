@@ -724,7 +724,7 @@ function saveValidatorUpdate(id: string, v: cosmos.ValidatorUpdate): string {
 function savePublicKey(publicKey: cosmos.PublicKey): string {
   const id = publicKey.ed25519
     ? publicKey.ed25519.toHexString()
-    : publicKey.secp256k1.toHexString()
+    : publicKey.secp256k1.toHexString();
   let pk = PublicKey.load(id);
   if (pk !== null) {
     log.debug("Validator with public key: {} already exists", [id]);

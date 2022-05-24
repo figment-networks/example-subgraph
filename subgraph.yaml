@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: cosmos
     name: CosmosHub
-    network: osmosis-1
+    network: cosmoshub-4
     source:
       startBlock: 0
     mapping:

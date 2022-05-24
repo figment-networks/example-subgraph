@@ -416,125 +416,159 @@ type MsgSend @entity {
   amount: [Coin!]
 }
 
-type MsgMultiSend @entity {
+type MsgMultiSend implements Any @entity {
   id: ID!
   inputs: [Input!]
   outputs: [Output!]
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgVerifyInvariant @entity {
+type MsgVerifyInvariant implements Any @entity {
   id: ID!
   sender: String
   invariantModuleName: String
   invariantRoute: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgSetWithdrawAddress @entity {
+type MsgSetWithdrawAddress implements Any @entity {
   id: ID!
   delegatorAddress: String
   withdrawAddress: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgWithdrawDelegatorReward @entity {
+type MsgWithdrawDelegatorReward implements Any @entity {
   id: ID!
   delegatorAddress: String
   validatorAddress: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgWithdrawValidatorCommission @entity {
+type MsgWithdrawValidatorCommission implements Any @entity {
   id: ID!
   validatorAddress: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgFundCommunityPool @entity {
+type MsgFundCommunityPool implements Any @entity {
   id: ID!
   amount: [Coin!]
   depositor: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgSubmitEvidence @entity {
+type MsgSubmitEvidence implements Any @entity {
   id: ID!
   submitter: String
   evidence: Any
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgSubmitProposal @entity {
+type MsgSubmitProposal implements Any @entity {
   id: ID!
   content: Any
   initialDeposit: [Coin!]
   proposer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgVote @entity {
+type MsgVote implements Any @entity {
   id: ID!
   proposalId: BigInt
   voter: String
   option: VoteOption
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgDeposit @entity {
+type MsgDeposit implements Any @entity {
   id: ID!
   proposalId: BigInt
   depositor: String
   amount: [Coin!]
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgUnjail @entity {
+type MsgUnjail implements Any @entity {
   id: ID!
   validatorAddr: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgCreateValidator @entity {
+type MsgCreateValidator implements Any @entity {
   id: ID!
   description: Description
   commission: CommissionRates
   minSelfDelegation: String
   delegatorAddress: String
   validatorAddress: String
-  pubkey: Any
-  value: Coin
+  pubkey: PublicKeyAny
+  amount: Coin
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgEditValidator @entity {
+type MsgEditValidator implements Any  @entity {
   id: ID!
   description: Description
   validatorAddress: String
   commissionRate: String
   minSelfDelegation: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgDelegate @entity {
+type MsgDelegate implements Any  @entity {
   id: ID!
   delegatorAddress: String
   validatorAddress: String
   amount: Coin
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgBeginRedelegate @entity {
+type MsgBeginRedelegate implements Any  @entity {
   id: ID!
   delegatorAddress: String
   validatorSrcAddress: String
   validatorDstAddress: String
   amount: Coin
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgUndelegate @entity {
+type MsgUndelegate implements Any  @entity {
   id: ID!
   delegatorAddress: String
   validatorAddress: String
   amount: Coin
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgCreateVestingAccount @entity {
+type MsgCreateVestingAccount implements Any  @entity {
   id: ID!
   fromAddress: String
   toAddress: String
   amount: Coin
   endTime: BigInt
   delayed: Boolean
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgTransfer @entity {
+type MsgTransfer implements Any  @entity {
   id: ID!
   sourcePort: String
   sourceChannel: String
@@ -543,16 +577,20 @@ type MsgTransfer @entity {
   receiver: String
   timeoutHeight: Height
   timeoutTimestamp: BigInt
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgChannelOpenInit @entity {
+type MsgChannelOpenInit implements Any @entity {
   id: ID!
   portId: String
   channel: Channel
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgChannelOpenTry @entity {
+type MsgChannelOpenTry implements Any @entity {
   id: ID!
   portId: String
   previousChannelId: String
@@ -561,9 +599,11 @@ type MsgChannelOpenTry @entity {
   proofInit: Bytes
   proofHeight: Height
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgChannelOpenAck @entity {
+type MsgChannelOpenAck implements Any @entity {
   id: ID!
   portId: String
   channelId: String
@@ -572,51 +612,63 @@ type MsgChannelOpenAck @entity {
   proofTry: Bytes
   proofHeight: Height
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgChannelOpenConfirm @entity {
+type MsgChannelOpenConfirm implements Any @entity {
   id: ID!
   portId: String
   channelId: String
   proofAck: Bytes
   proofHeight: Height
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgChannelCloseInit @entity {
+type MsgChannelCloseInit implements Any @entity {
   id: ID!
   portId: String
   channelId: String
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgChannelCloseConfirm @entity {
+type MsgChannelCloseConfirm implements Any @entity {
   id: ID!
   portId: String
   channelId: String
   proofInit: Bytes
   proofHeight: Height
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgRecvPacket @entity {
+type MsgRecvPacket implements Any @entity {
   id: ID!
   packet: Packet
   proofCommitment: Bytes
   proofHeight: Height
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgTimeout @entity {
+type MsgTimeout implements Any @entity {
   id: ID!
   packet: Packet
   proofUnreceived: Bytes
   proofHeight: Height
   nextSequenceRecv: BigInt
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgTimeoutOnClose @entity {
+type MsgTimeoutOnClose implements Any @entity {
   id: ID!
   packet: Packet
   proofUnreceived: Bytes
@@ -624,32 +676,40 @@ type MsgTimeoutOnClose @entity {
   proofHeight: Height
   nextSequenceRecv: BigInt
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgAcknowledgement @entity {
+type MsgAcknowledgement implements Any @entity {
   id: ID!
   packet: Packet
   acknowledgement: Bytes
   proofAcked: Bytes
   proofHeight: Height
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgCreateClient @entity {
+type MsgCreateClient implements Any @entity {
   id: ID!
   clientState: Any
   consensusState: Any
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgUpdateClient @entity {
+type MsgUpdateClient implements Any @entity {
   id: ID!
   clientId: String
   header: Any
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgUpgradeClient @entity {
+type MsgUpgradeClient implements Any @entity {
   id: ID!
   clientId: String
   clientState: Any
@@ -657,25 +717,31 @@ type MsgUpgradeClient @entity {
   proofUpgradeClient: Bytes
   proofUpgradeConsensusState: Bytes
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgSubmitMisbehaviour @entity {
+type MsgSubmitMisbehaviour implements Any @entity {
   id: ID!
   clientId: String
   misbehaviour: Any
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgConnectionOpenInit @entity {
+type MsgConnectionOpenInit implements Any @entity {
   id: ID!
   clientId: String
   counterparty: ConnectionCounterparty
   version: ConnectionVersion
   delayPeriod: BigInt
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgConnectionOpenTry @entity {
+type MsgConnectionOpenTry implements Any @entity {
   id: ID!
   clientId: String
   previousConnectionId: String
@@ -689,9 +755,11 @@ type MsgConnectionOpenTry @entity {
   proofConsensus: Bytes
   consensusHeight: Height
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgConnectionOpenAck @entity {
+type MsgConnectionOpenAck implements Any @entity {
   id: ID!
   connectionId: String
   counterpartyConnectionId: String
@@ -703,14 +771,18 @@ type MsgConnectionOpenAck @entity {
   proofConsensus: Bytes
   consensusHeight: Height
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
-type MsgConnectionOpenConfirm @entity {
+type MsgConnectionOpenConfirm implements Any @entity {
   id: ID!
   connectionId: String
   proofAck: Bytes
   proofHeight: Height
   signer: String
+  typeUrl: String
+  value: Bytes
 }
 
 type Channel @entity {

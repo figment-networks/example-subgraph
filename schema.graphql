@@ -1,5 +1,13 @@
-type Reward @entity {
+type Token @entity {
   id: ID!
   amount: String
-  validator: String
+  denom: String
+}
+
+type TokenSwap @entity {
+  id: ID!
+  sender: String
+  poolId: String
+  tokenIn: Token
+  tokenOut: Token
 }

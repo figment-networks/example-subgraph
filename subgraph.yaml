@@ -5,16 +5,17 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: cosmos
-    name: CosmosHub
+    name: Osmosis
     network: osmosis-1
     source:
-      startBlock: 0
+      startBlock: 2522560
     mapping:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Reward
+        - TokenSwap
+        - Token
       eventHandlers:
-        - event: rewards
-          handler: handleReward
+        - event: token_swapped
+          handler: handleSwaps
       file: ./src/mapping.ts

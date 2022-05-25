@@ -1,26 +1,12 @@
-# subgraph-cosmos-example
+# Cosmos Data Dump Subgraph
 
-## Setup
+This subgraph works with full blocks using all available proto definitions and saves them to the subgraph store. The following steps will setup a local firehose instance and deploy the example subgraph.
 
-1. Run ingestor
+## Setup Local Firehose
 
-```bash
-git clone https://github.com/figment-networks/ingestor-tendermint.git
-```
+Follow the setup instructions in the `firehose-cosmos` [readme](https://github.com/figment-networks/firehose-cosmos/tree/main/devel/cosmoshub4) to start up a local firehose instance. 
 
-2. Run graph-node
-
-```bash
-git clone https://github.com/figment-networks/graph-node.git
-```
-
-3. Run gaia
-
-```bash
-git clone https://github.com/figment-networks/gaia.git
-```
-
-## Build
+## Build the subgraph
 
 ```bash
 yarn
@@ -41,6 +27,14 @@ yarn deploy-local
 ```
 
 ## Query subgraph
+
+```bash
+The subgraph can be queried though the endpoint: 
+
+http://localhost:8000/subgraphs/name/cosmos-data-dump/graphql
+
+The query will print all saved data from a block given its height.
+```
 
 ```bash
 {

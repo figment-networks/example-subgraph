@@ -8,11 +8,11 @@ By running this example subgraph, and with the following query, you can retrieve
 query SwapsForUser($senderAddress: String!) {
   tokenSwaps(where: {sender: $senderAddress}) {
     tokenIn {
-      amount,
+      amount
       denom
     },
     tokenOut {
-      amount,
+      amount
       denom
     }
   }

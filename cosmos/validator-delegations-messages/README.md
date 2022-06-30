@@ -2,16 +2,6 @@
 
 This example subgraph stores `Delegation` objects that represent delegations being made in the Cosmos Hub chain. In order to do that, the handler function decode `/cosmos.staking.v1beta1.MsgDelegate` messages.
 
-## Generating a manifest
-
-The subgraph is compatible with multiple Cosmos networks so before building the subgraph you need to generate a manifest file for the network of your choice. In case of the Cosmos Hub network, run the following command:
-
-```shell
-$ yarn prepare:cosmoshub
-```
-
-For the list of supported networks, see the scripts in the [`package.json`](package.json) file.
-
 ## Querying the subgraph
 
 By running this example subgraph, and with the following query you can retrieve all the delegations made to the [Figment](https://atomscan.com/validators/cosmosvaloper1hjct6q7npsspsg3dgvzk3sdf89spmlpfdn6m9d) validator, and the amounts of each of the delegations:

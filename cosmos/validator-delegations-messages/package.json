@@ -4,12 +4,6 @@
   "repository": "https://github.com/graphprotocol/example-subgraph",
   "license": "MIT",
   "scripts": {
-    "prepare:cosmoshub:subgraph": "mustache config/cosmoshub.json subgraph.template.yaml > subgraph.yaml",
-    "prepare:cosmoshub:mapping": "mustache config/cosmoshub.json src/mapping.template.ts > src/mapping.ts",
-    "prepare:cosmoshub": "yarn prepare:cosmoshub:subgraph && yarn prepare:cosmoshub:mapping",
-    "prepare:osmosis:subgraph": "mustache config/osmosis.json subgraph.template.yaml > subgraph.yaml",
-    "prepare:osmosis:mapping": "mustache config/osmosis.json src/mapping.template.ts > src/mapping.ts",
-    "prepare:osmosis": "yarn prepare:osmosis:subgraph && yarn prepare:osmosis:mapping",
     "codegen": "graph codegen",
     "build": "graph build",
     "create-local": "graph create cosmos-message-example --node http://127.0.0.1:8020",

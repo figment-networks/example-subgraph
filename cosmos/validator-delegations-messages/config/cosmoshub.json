@@ -1,5 +1,0 @@
-{
-  "name": "CosmosHub",
-  "network": "cosmoshub-4",
-  "ts_pkg": "@graphprotocol/cosmoshub-ts"
-}

@@ -1,5 +1,5 @@
 import { cosmos } from "@graphprotocol/graph-ts";
-import { cosmos as cosmos_sdk } from "@graphprotocol/cosmoshub-ts";
+import { cosmos as cosmos_sdk } from "{{ ts_pkg }}";
 import { Delegation, Coin } from "../generated/schema";
 
 export function handleMsgDelegate(messageData: cosmos.MessageData): void {

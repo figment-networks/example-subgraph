@@ -1,4 +1,5 @@
 {
   "name": "Osmosis",
-  "network": "osmosis-1"
+  "network": "osmosis-1",
+  "ts_pkg": "@graphprotocol/osmosis-ts"
 }

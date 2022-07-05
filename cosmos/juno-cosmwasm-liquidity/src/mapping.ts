@@ -3,8 +3,8 @@ import { cosmwasm } from "@graphprotocol/juno-ts";
 import { Contract } from "../generated/schema";
 import { JSON } from "assemblyscript-json";
 
-export function handleMsgExecuteContract(messageData: cosmos.MessageData): void {
-  const message = cosmwasm.wasm.v1.decodeMsgExecuteContract(messageData.message.value);
+export function handleMsgExecuteContract(data: cosmos.MessageData): void {
+  const message = cosmwasm.wasm.v1.decodeMsgExecuteContract(data.message.value);
   const id = message.contract;
   let contract = Contract.load(id);
 

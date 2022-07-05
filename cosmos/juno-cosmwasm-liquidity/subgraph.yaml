@@ -1,11 +1,11 @@
 specVersion: 0.0.5
-description: CosmWasm Liquidity Example
+description: Juno CosmWasm Liquidity Example
 repository: https://github.com/graphprotocol/example-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: cosmos
-    name: cosmwasm-liquidity-example
+    name: juno-cosmwasm-liquidity
     network: juno-1
     source:
       startBlock: 0

@@ -1,0 +1,4 @@
+type Contract @entity {
+  id: ID!
+  liquidity: BigInt!
+}

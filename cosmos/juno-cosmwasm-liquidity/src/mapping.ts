@@ -1,4 +1,4 @@
-import { json, BigInt, cosmos, log, Bytes } from "@graphprotocol/graph-ts";
+import { json, BigInt, cosmos, log, Bytes, typeConversion } from "@graphprotocol/graph-ts";
 import { cosmwasm } from "@graphprotocol/juno-ts";
 import { Contract } from "../generated/schema";
 
@@ -36,7 +36,7 @@ export function handleMsgExecuteContract(data: cosmos.MessageData): void {
         if (validateBigInt(amount.value.toString())) {
           contract.liquidity = contract.liquidity.minus(BigInt.fromString(amount.value.toString()));
         } else {
-          log.warning("amount in not a valid number: {}", [amount.value.toString()])
+          log.warning("amount in not a valid number: {}", [typeConversion.bytesToString(message.msg)])
         }
       }
     }

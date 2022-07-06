@@ -36,12 +36,12 @@ export function handleMsgExecuteContract(data: cosmos.MessageData): void {
         if (validateBigInt(amount.value.toString())) {
           contract.liquidity = contract.liquidity.minus(BigInt.fromString(amount.value.toString()));
         } else {
-          log.warning("amount in not a valid number: {}", [typeConversion.bytesToString(message.msg)])
+          log.warning("amount in not a valid number: {}", [amount.value.toString()])
         }
       }
     }
   } else {
-    log.warning("MsgExecuteContract.msg is not a valid json object: {}", [message.msg.toString()])
+    log.warning("MsgExecuteContract.msg is not a valid json object: {}", [typeConversion.bytesToString(message.msg)])
   }
 
   contract.save();

@@ -1,5 +1,5 @@
 specVersion: 0.0.5
-description: Validator Delegations Messages Example
+description: Validator Delegations Example
 repository: https://github.com/graphprotocol/example-subgraph
 schema:
   file: ./schema.graphql

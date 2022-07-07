@@ -12,6 +12,7 @@ export function handleMsgDelegate(messageData: cosmos.MessageData): void {
 
 function saveDelegation(id: string, message: cosmos_sdk.staking.v1beta1.MsgDelegate): void {
   const msg = new Delegation(id);
+
   msg.delegatorAddress = message.delegator_address;
   msg.validatorAddress = message.validator_address;
   msg.amount = saveCoin(id, message.amount as cosmos_sdk.base.v1beta1.Coin);
@@ -20,8 +21,11 @@ function saveDelegation(id: string, message: cosmos_sdk.staking.v1beta1.MsgDeleg
 
 function saveCoin(id: string, c: cosmos_sdk.base.v1beta1.Coin): string {
   const coin = new Coin(id);
+
   coin.amount = c.amount;
   coin.denom = c.denom;
+
   coin.save();
+
   return id;
 }

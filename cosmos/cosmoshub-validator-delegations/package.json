@@ -1,16 +1,16 @@
 {
-  "name": "cosmos-validator-delegations",
+  "name": "cosmoshub-validator-delegations",
   "version": "0.1.0",
   "repository": "https://github.com/graphprotocol/example-subgraph",
   "license": "MIT",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "create-local": "graph create cosmos-validator-delegations --node http://127.0.0.1:8020",
-    "deploy-local": "graph deploy cosmos-validator-delegations -l v0.1.0 --ipfs http://127.0.0.1:5001 --node http://127.0.0.1:8020",
-    "remove-local": "graph remove cosmos-validator-delegations --node http://127.0.0.1:8020",
-    "create": "graph create cosmos-validator-delegations --node https://api.thegraph.com/deploy/",
-    "deploy": "graph deploy cosmos-validator-delegations --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
+    "create-local": "graph create cosmoshub-validator-delegations --node http://127.0.0.1:8020",
+    "deploy-local": "graph deploy cosmoshub-validator-delegations -l v0.1.0 --ipfs http://127.0.0.1:5001 --node http://127.0.0.1:8020",
+    "remove-local": "graph remove cosmoshub-validator-delegations --node http://127.0.0.1:8020",
+    "create": "graph create cosmoshub-validator-delegations --node https://api.thegraph.com/deploy/",
+    "deploy": "graph deploy cosmoshub-validator-delegations --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "https://github.com/figment-networks/graph-cli.git#cosmos-v1.1",

@@ -1,6 +1,6 @@
 # Cosmoshub Validator Delegations Example
 
-This example subgraph stores `Delegation` objects that represent delegations being made in the Cosmos Hub chain. In order to do that, the handler function decode `/cosmos.staking.v1beta1.MsgDelegate` messages.
+This example subgraph stores `Delegation` objects that represent delegations being made in the Cosmos Hub chain. In order to do that, the handler function decodes `/cosmos.staking.v1beta1.MsgDelegate` messages.
 
 ## Querying the subgraph
 

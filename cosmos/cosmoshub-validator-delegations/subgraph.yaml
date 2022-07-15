@@ -1,12 +1,12 @@
 specVersion: 0.0.5
-description: Validator Delegations Example
+description: Cosmoshub Validator Delegations Example
 repository: https://github.com/graphprotocol/example-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: cosmos
-    name: {{ name }}
-    network: {{ network }}
+    name: cosmoshub-validator-delegations
+    network: cosmoshub-4
     source:
       startBlock: 0
     mapping:
@@ -15,6 +15,7 @@ dataSources:
       entities:
         - Delegation
         - Coin
-      transactionHandlers:
-        - handler: handleTx
+      messageHandlers:
+        - message: /cosmos.staking.v1beta1.MsgDelegate
+          handler: handleMsgDelegate
       file: ./src/mapping.ts

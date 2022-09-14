@@ -6,9 +6,9 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "create-local": "graph create cosmos-data-dump --node http://localhost:8020",
-    "deploy-local": "graph deploy cosmos-data-dump -l v0.1.0 --ipfs http://localhost:5001 --node http://localhost:8020",
-    "remove-local": "graph remove cosmos-data-dump --node http://localhost:8020"
+    "create-local": "graph create cosmos-data-dump --node http://127.0.0.1:8020",
+    "deploy-local": "graph deploy cosmos-data-dump -l v0.1.0 --ipfs http://127.0.0.1:5001 --node http://127.0.0.1:8020",
+    "remove-local": "graph remove cosmos-data-dump --node http://127.0.0.1:8020"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.30.0",

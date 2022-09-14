@@ -435,11 +435,6 @@ argparse@^1.0.7:
   dependencies:
     sprintf-js "~1.0.2"
 
-as-proto@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/as-proto/-/as-proto-0.2.3.tgz#34107a1051e746324e258062822cb9e18b58e8c4"
-  integrity sha512-JwWFcTBYVTOzJEMqXtZfU/L9bYzR6rrLFJBA1DC4kRs0zE12titZtWhpnBAAmV27dhMSWauqOBJgbt5OrK2rcw==
-
 asap@~2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
@@ -1586,9 +1581,9 @@ globals@^9.18.0:
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.18.0.tgz#aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
   integrity sha512-S0nG3CLEQiY/ILxqtztTWH/3iRRdyBLw6KMDxnKMchrtbj2OFmehVh0WUCfW3DUrIgx/qFrJPICrq4Z4sTR9UQ==
 
-"gluegun@git+https://github.com/edgeandnode/gluegun.git#v4.3.1-pin-colors-dep":
+"gluegun@https://github.com/edgeandnode/gluegun#v4.3.1-pin-colors-dep":
   version "4.3.1"
-  resolved "git+https://github.com/edgeandnode/gluegun.git#b34b9003d7bf556836da41b57ef36eb21570620a"
+  resolved "https://github.com/edgeandnode/gluegun#b34b9003d7bf556836da41b57ef36eb21570620a"
   dependencies:
     apisauce "^1.0.1"
     app-module-path "^2.2.0"
@@ -1626,12 +1621,6 @@ graceful-fs@^4.1.6, graceful-fs@^4.2.0:
   version "4.2.10"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.10.tgz#147d3a006da4ca3ce14728c7aefc287c367d7a6c"
   integrity sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==
-
-"graph-cosmos-ts@https://github.com/figment-networks/graph-cosmos-ts":
-  version "0.1.0-alpha.0"
-  resolved "https://github.com/figment-networks/graph-cosmos-ts#d42112c3ae6fb707f12023969223d67a3339cb1a"
-  dependencies:
-    as-proto "^0.2.3"
 
 graphql@15.5.0:
   version "15.5.0"

@@ -1,5 +1,4 @@
 import { BigInt, log, cosmos } from "@graphprotocol/graph-ts";
-import { cosmos as cosmos_messages } from "graph-cosmos-ts"
 import {
   Block,
   Header,
